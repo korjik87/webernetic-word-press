@@ -19,8 +19,45 @@ define( 'BOOK_DELETE_LIMIT', 10000 );
 
 
 function my_gallery_shortcode() {
-    return '<div class="my-gallery">Your gallery code here</div>';
+
+    $params = array(
+        'post_type' => 'book',
+        'posts_per_page' => 5 // этот параметр не обязателен, так как get_posts() по умолчанию и так выводит 5 постов
+    );
+    $recent_posts_array = get_posts( $params );
+    $out = '';
+    foreach( $recent_posts_array as $recent_post_single ) :
+        $out .= "<div><a href='" . $recent_post_single->guid . "'>".$recent_post_single->post_title."</a></div>";
+    endforeach;
+
+    return '<div class="my-gallery">'.$out.'</div>';
+
 }
+
+
+//
+//function my_gallery_shortcode() {
+//
+//    $params = array(
+////        'post_type' => 'book',
+//        'posts_per_page' => 5
+//    );
+//    $out = '';
+//    $recent_posts_array = get_posts( $params );
+//    foreach( $recent_posts_array as $recent_post_single ) :
+//        setup_postdata( $recent_post_single ); // устанавливает $post (глобальная переменная - объект поста)
+//        $out .= '<a href="' + the_permalink() +'">' + the_title() + '</a>';
+//    endforeach;
+//    wp_reset_postdata();
+//
+//    return $out;
+//
+//    return '<div class="my-gallery">Your gallery code here</div>';
+//
+//
+//}
+
+
 add_shortcode('book_list', 'my_gallery_shortcode');
 
 
